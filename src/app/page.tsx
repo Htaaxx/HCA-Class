@@ -8,10 +8,14 @@ export default function Home() {
         <h1 className="text-xl font-bold text-purple-400">SmartClass</h1>
         <div>
           <button className="text-white bg-purple-600 px-4 py-2 rounded-md hover:bg-purple-700 transition">
-            Sign Up
+            <a href="signup">
+              Sign Up
+              </a>
           </button>
           <button className="ml-4 text-purple-600 bg-white px-4 py-2 rounded-md hover:bg-gray-100 transition">
-            Sign In
+            <a href="signin">
+              Sign In
+            </a>
           </button>
         </div>
       </header>
@@ -31,7 +35,9 @@ export default function Home() {
             SmartClass transforms classrooms with facial recognition, automated comfort controls, and real-time safety alerts for a smarter, safer learning environment.
           </p>
           <button className="bg-purple-600 text-white px-6 py-3 rounded-md text-lg hover:bg-purple-700 transition text-left">
-            Log in now
+            <a href="signin">
+              Log in now 
+            </a>
           </button>
         </div>
       </main>
