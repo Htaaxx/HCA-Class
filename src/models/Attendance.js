@@ -15,7 +15,7 @@ const attendanceSchema = new mongoose.Schema({
 });
 
 // Create the Attendance Model
-const Attendance = mongoose.model("Attendance", attendanceSchema);
+const Attendance = mongoose.models.Attendance || mongoose.model("Attendance", attendanceSchema);
 
 // Function to Update Today's Attendance
 export async function updateTodayAttendance(studentId) {

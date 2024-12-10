@@ -18,7 +18,8 @@ const temperatureSchema = new mongoose.Schema({
 });
 
 // Create the Temperature Model
-const Temperature = mongoose.model("Temperature", temperatureSchema);
+const Temperature = mongoose.models.Temperature || mongoose.model("Temperature", temperatureSchema);
+
 
 // Function to Save Current Temperature Data
 export async function saveTemperatureData(temp, humidity) {
