@@ -120,7 +120,7 @@ export default function Dashboard() {
       {/* Main Content */}
       <main className="ml-64 flex-1 p-6">
         <header className="flex items-center justify-between pb-6 border-b">
-          <h1 className="text-3xl font-bold text-gray-800">22CLC06</h1>
+          <h1 className="text-3xl font-bold text-purple-600">22CLC06</h1>
           <button className="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center">
             {/* Replace with your profile picture */}
             <a href="/profile" className="text-gray-700 font-bold">
