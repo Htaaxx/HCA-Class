@@ -1,25 +1,21 @@
 import dbConnect from "../../../lib/mongodb";
-import Attendance from "../../../models/Attendance";
-import Temperature from "../../../models/Temperature";
+import Attendance, { getTodayAttendanceCount, getAttendanceHistory} from "../../../models/Attendances";
+import Temperature, { getDailyTemperatureHistory } from "../../../models/Temperatures";
 import User from "../../../models/Users";
 
 export async function GET(req, res) {
   await dbConnect(); 
 
   try {
-    const today = new Date();
-    const todayAttendance = await Attendance.findOne({
-      date: today.toISOString().substring(0, 10),
-    });
-    const todayAttendanceCount = todayAttendance ? todayAttendance.count : 0;
 
-    const attendanceHistory = await Attendance.find({})
-      .limit(7);
-    console.log("Attendance History:", attendanceHistory);
+    // const today = new Date();
+    const todayAttendance = await getTodayAttendanceCount();
+    const todayAttendanceCount = todayAttendance ? todayAttendance : 0;
+    console.log("Today's attendance count:", todayAttendanceCount);
 
-    const temperatureData = await Temperature.find({})
-      .limit(10);
-    console.log("Temperature Data:", temperatureData);
+    const attendanceHistory = await getAttendanceHistory();
+
+    const temperatureData = await getDailyTemperatureHistory();
 
     const recentUsers = await User.find({}).sort({ createdAt: -1 }).limit(5);
 

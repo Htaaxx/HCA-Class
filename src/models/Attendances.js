@@ -1,18 +1,20 @@
 import mongoose from "mongoose";
 
 // Define the Attendance Schema
-const attendanceSchema = new mongoose.Schema({
-  date: {
-    type: Date,
-    required: true,
-    unique: true, // Ensure one record per day
-  },
-  attendees: {
-    type: [String], // Array of student identifiers (e.g., IDs or names)
-    required: true,
-    default: [], // Defaults to an empty list if no attendees yet
-  },
-});
+const attendanceSchema = new mongoose.Schema(
+  {
+    date: {
+      type: Date,
+      required: true,
+      unique: true, // Ensure one record per day
+    },
+    attendees: {
+      type: [String], // Array of student identifiers (e.g., IDs or names)
+      required: true,
+      default: [], // Defaults to an empty list if no attendees yet
+    },
+  }
+);
 
 // Create the Attendance Model
 const Attendance = mongoose.models.Attendance || mongoose.model("Attendance", attendanceSchema);
@@ -49,9 +51,11 @@ export async function updateTodayAttendance(studentId) {
 export async function getTodayAttendanceCount() {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
+  const endOfDay = new Date(today);
+  endOfDay.setHours(23, 59, 59, 999); // Set to the end of the day
 
   try {
-    const attendanceRecord = await Attendance.findOne({ date: today });
+    const attendanceRecord = await Attendance.findOne({ date: { $gte: today, $lte: endOfDay } });
     const count = attendanceRecord ? attendanceRecord.attendees.length : 0;
     console.log("Today's attendance count:", count);
     return count;
@@ -68,8 +72,10 @@ export async function getAttendanceHistory(date = null) {
       // Fetch attendance for a specific date
       const specificDate = new Date(date);
       specificDate.setHours(0, 0, 0, 0);
+      const endOfDay = new Date(specificDate);
+      endOfDay.setHours(23, 59, 59, 999); // Set to the end of the day
 
-      const record = await Attendance.findOne({ date: specificDate });
+      const record = await Attendance.findOne({ date: { $gte: specificDate, $lte: endOfDay } });
       const count = record ? record.attendees.length : 0;
       console.log(`Attendance count for ${specificDate.toDateString()}:`, count);
       return { date: specificDate, count };

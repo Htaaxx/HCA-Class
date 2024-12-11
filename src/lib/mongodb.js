@@ -52,10 +52,12 @@ async function dbConnect() {
       useUnifiedTopology: true,
     });
     console.log("Connected to MongoDB");
+    console.log("Connected to MongoDB:", mongoose.connection.name);
   } catch (error) {
     console.error("Error connecting to MongoDB:", error);
     throw new Error("Failed to connect to MongoDB");
   }
+  
 }
 
 export default dbConnect;

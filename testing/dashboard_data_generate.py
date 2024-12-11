@@ -2,6 +2,7 @@ import random
 from datetime import datetime, timedelta
 from faker import Faker
 from pymongo import MongoClient
+import pytz
 
 # Initialize Faker for generating random names and emails
 fake = Faker()
@@ -15,6 +16,9 @@ db = client["AccountDB"]  # Database name from your URI
 attendance_collection = db["Attendance"]
 temperature_collection = db["Temperature"]
 users_collection = db["Users"]
+
+# Define the Vietnam timezone (UTC+7)
+vietnam_tz = pytz.timezone("Asia/Ho_Chi_Minh")
 
 # Function to generate random users
 def generate_users(num_users=10):
@@ -33,7 +37,7 @@ def generate_users(num_users=10):
     print(f"Generated {num_users} users.")
 
 # Function to generate attendance data
-def generate_attendance(date, user_ids):
+def generate_attendance(date, user_ids):  # Add timezone info
     num_attendees = random.randint(0, len(user_ids))
     attendees = random.sample(user_ids, num_attendees)
     attendance = {
@@ -45,6 +49,7 @@ def generate_attendance(date, user_ids):
 
 # Function to generate temperature data
 def generate_temperature_data(date, num_entries=24):
+    date = date.replace(tzinfo=vietnam_tz)  # Add timezone info
     records = []
     for hour in range(num_entries):
         timestamp = date + timedelta(hours=hour)
@@ -74,4 +79,4 @@ def generate_daily_data(start_date, days=7):
 # Generate data for the past 7 days
 if __name__ == "__main__":
     start_date = datetime.now() - timedelta(days=6)  # Start 6 days ago
-    generate_daily_data(start_date, days=7)
+    generate_daily_data(start_date, days=10)

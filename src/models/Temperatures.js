@@ -1,23 +1,24 @@
 import mongoose from "mongoose";
 
 // Define the Temperature Schema
-const temperatureSchema = new mongoose.Schema({
-  timestamp: {
-    type: Date,
-    required: true,
-    default: Date.now, // Automatically set the current time for each record
-  },
-  currentTemperature: {
-    type: Number,
-    required: true, // Temperature reading in Celsius
-  },
-  currentHumidity: {
-    type: Number,
-    required: true, // Humidity reading as a percentage
-  },
-});
+const temperatureSchema = new mongoose.Schema(
+  {
+    timestamp: {
+      type: Date,
+      required: true,
+      default: Date.now, // Automatically set the current time for each record
+    },
+    currentTemperature: {
+      type: Number,
+      required: true, // Temperature reading in Celsius
+    },
+    currentHumidity: {
+      type: Number,
+      required: true, // Humidity reading as a percentage
+    },
+  }
+);
 
-// Create the Temperature Model
 const Temperature = mongoose.models.Temperature || mongoose.model("Temperature", temperatureSchema);
 
 
@@ -41,13 +42,14 @@ export async function saveTemperatureData(temp, humidity) {
 export async function getDailyTemperatureHistory() {
   const startOfDay = new Date();
   startOfDay.setHours(0, 0, 0, 0); // Reset to the start of the day
+  const now = new Date(); // Current time
+
 
   try {
-    const records = await Temperature.find({
-      timestamp: { $gte: startOfDay }, // Get records from the start of the day
-    }).sort({ timestamp: 1 }); // Sort by time
+    // Get all temperature records from the start of the day to the current time
+    const records = await Temperature.find({ timestamp: { $gte: startOfDay, $lte: now } });
 
-    console.log("Daily temperature history:", records);
+    // console.log("Daily temperature history:", records);
     return records;
   } catch (error) {
     console.error("Error retrieving temperature history:", error);
