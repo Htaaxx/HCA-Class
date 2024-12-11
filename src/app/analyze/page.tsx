@@ -41,7 +41,7 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("/api/landingpage");
+        const response = await axios.get("/api/analyze");
         setData(response.data);
       } catch (error) {
         console.error("Error fetching dashboard data:", error);
@@ -79,7 +79,7 @@ export default function Dashboard() {
           <ul className="space-y-4 px-6 py-4">
             <li>
               <a
-                href="/landingpage"
+                href="/dashboard"
                 className="flex items-center p-3 bg-gray-100 text-gray-600 rounded-md hover:bg-purple-100"
               >
                 <FiGrid className="mr-3 text-gray-500" size={18} />
