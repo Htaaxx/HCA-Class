@@ -1,25 +1,116 @@
 // app/page.js
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FiGrid, FiBarChart2, FiSettings, FiLogOut } from "react-icons/fi";
+import axios from "axios";
+import { set } from "mongoose";
 
 export default function Home() {
+  
+  // Get the current state of the light with axios
+
   const [autoCalibrate, setAutoCalibrate] = useState(false);
   const [openDoor, setOpenDoor] = useState(false);
   const [lightIntensity, setLightIntensity] = useState(50);
 
+  // Get light data
+  useEffect(() => {
+    axios.get("http://localhost:3000/api/config/light").then((res) => {
+      setAutoCalibrate(res.data.lightAutoCalibration);
+      setLightIntensity(res.data.lightBrightness);
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+  }, []);
+
+  // Get door data
+  useEffect(() => {
+    axios.get("http://localhost:3000/api/config/opendoor").then((res) => {
+      setOpenDoor(res.data.doorStatus);
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+  }, []);
+
+  // Log the data
+  console.log(autoCalibrate);
+  console.log(openDoor);
+  console.log(lightIntensity);
+
+
   const handleAutoCalibrateToggle = () => {
-    setAutoCalibrate(!autoCalibrate);
+    const newAutoCalibrate = !autoCalibrate;
+    setAutoCalibrate(newAutoCalibrate);
+    fetch("http://localhost:3000/api/config/light", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        lightAutoCalibration: newAutoCalibrate,
+        lightBrightness: lightIntensity,
+      }),
+    });
   };
 
   const handleOpenDoorToggle = () => {
-    setOpenDoor(!openDoor);
+    const newOpenDoor = !openDoor;
+    setOpenDoor(newOpenDoor);
+    fetch("http://localhost:3000/api/config/opendoor", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        doorStatus: newOpenDoor,
+      }),
+    });
   };
 
   const handleLightIntensityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setLightIntensity(Number(e.target.value));
+    const newLightIntensity = parseInt(e.target.value);
+    setLightIntensity(newLightIntensity);
+    fetch("http://localhost:3000/api/config/light", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        lightBrightness: newLightIntensity,
+        lightAutoCalibration: autoCalibrate,
+      }),
+    });
   };
+
+  const handleFireEmergency = () => {
+    alert("Fire emergency - Alert student");
+    fetch("http://localhost:3000/api/config/alert", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        type: "fire",
+      }),
+    });
+
+  };
+
+  const handleEarthquakeEmergency = () => {
+    alert("Earthquake emergency - Alert student");
+    fetch("http://localhost:3000/api/config/alert", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        type: "earthquake",
+      }),
+    });
+  }
 
   return (
     <div className="flex min-h-screen bg-gray-100">
@@ -140,10 +231,16 @@ export default function Home() {
               <h2 className="text-xl font-semibold mb-4">Emergency</h2>
 
               <div className="flex flex-col gap-4">
-                <button className="py-2 px-4 bg-red-500 text-white rounded-lg font-medium">
+                <button 
+                  className="py-2 px-4 bg-red-500 text-white rounded-lg font-medium"
+                  onClick={handleFireEmergency}
+                >
                   Fire emergency - Alert student
                 </button>
-                <button className="py-2 px-4 bg-red-500 text-white rounded-lg font-medium">
+                <button 
+                  className="py-2 px-4 bg-red-500 text-white rounded-lg font-medium"
+                  onClick={handleEarthquakeEmergency}
+                >
                   Earthquake emergency - Alert student
                 </button>
               </div>
