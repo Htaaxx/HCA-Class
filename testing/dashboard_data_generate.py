@@ -13,9 +13,9 @@ client = MongoClient(MONGODB_URI)
 db = client["AccountDB"]  # Database name from your URI
 
 # Collections for the schemas
-attendance_collection = db["Attendance"]
-temperature_collection = db["Temperature"]
-users_collection = db["Users"]
+attendance_collection = db["attendances"]
+temperature_collection = db["temperatures"]
+users_collection = db["users"]
 
 # Define the Vietnam timezone (UTC+7)
 vietnam_tz = pytz.timezone("Asia/Ho_Chi_Minh")
