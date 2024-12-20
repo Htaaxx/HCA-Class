@@ -1,7 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import 'react-calendar/dist/Calendar.css';
-import { FiGrid, FiSettings, FiBarChart2, FiLogOut } from 'react-icons/fi';
+import { FiGrid, FiSettings, FiBarChart2, FiLogOut, FiCpu } from 'react-icons/fi';
 
 export default function Dashboard() {
   const [date, setDate] = useState(new Date());
@@ -13,17 +13,17 @@ export default function Dashboard() {
   });
 
   // Get days in a month
-  const getDaysInMonth = (year:number, month:number) => {
+  const getDaysInMonth = (year: number, month: number) => {
     return new Date(year, month + 1, 0).getDate();
   };
 
   // Get the first day of the month (0 = Sunday, 6 = Saturday)
-  const getFirstDayOfMonth = (year:number, month:number) => {
+  const getFirstDayOfMonth = (year: number, month: number) => {
     return new Date(year, month, 1).getDay();
   };
 
   // Change month navigation
-  const navigateMonth = (direction:number) => {
+  const navigateMonth = (direction: number) => {
     const newDate = new Date(date);
     newDate.setMonth(date.getMonth() + direction);
     setDate(newDate);
@@ -111,6 +111,15 @@ export default function Dashboard() {
                 Configuration
               </a>
             </li>
+            <li>
+              <a
+                href="/chatbot"
+                className="flex items-center p-3 bg-gray-100 text-gray-600 rounded-md hover:bg-purple-100"
+              >
+                <FiCpu className="mr-3 text-gray-500" size={18} />
+                Chat Bot
+              </a>
+            </li>
           </ul>
         </nav>
         <div className="p-6 border-t border-gray-200">
@@ -123,6 +132,7 @@ export default function Dashboard() {
           </a>
         </div>
       </aside>
+
 
       {/* Main Content */}
       <div className="ml-64 flex-1 p-6 bg-gray-50">

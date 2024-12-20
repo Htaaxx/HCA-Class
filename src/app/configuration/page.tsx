@@ -2,13 +2,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { FiGrid, FiBarChart2, FiSettings, FiLogOut } from "react-icons/fi";
+import { FiGrid, FiBarChart2, FiSettings, FiLogOut, FiCpu } from "react-icons/fi";
 import axios from "axios";
 import { set } from "mongoose";
 import { send, title } from "process";
 
 export default function Home() {
-  
+
   // Get the current state of the light with axios
 
   const [autoCalibrate, setAutoCalibrate] = useState(false);
@@ -21,9 +21,9 @@ export default function Home() {
       setAutoCalibrate(res.data.lightAutoCalibration);
       setLightIntensity(res.data.lightBrightness);
     })
-    .catch((err) => {
-      console.error(err);
-    });
+      .catch((err) => {
+        console.error(err);
+      });
   }, []);
 
   // Get door data
@@ -31,9 +31,9 @@ export default function Home() {
     axios.get("http://localhost:3000/api/config/opendoor").then((res) => {
       setOpenDoor(res.data.doorStatus);
     })
-    .catch((err) => {
-      console.error(err);
-    });
+      .catch((err) => {
+        console.error(err);
+      });
   }, []);
 
   // Log the data
@@ -214,6 +214,15 @@ export default function Home() {
                 Configuration
               </a>
             </li>
+            <li>
+              <a
+                href="/chatbot"
+                className="flex items-center p-3 bg-gray-100 text-gray-600 rounded-md hover:bg-purple-100"
+              >
+                <FiCpu className="mr-3 text-gray-500" size={18} />
+                Chat Bot
+              </a>
+            </li>
           </ul>
         </nav>
         <div className="p-6 border-t border-gray-200">
@@ -226,6 +235,7 @@ export default function Home() {
           </a>
         </div>
       </aside>
+
 
       {/* Main Content */}
       <div className="flex-1 ml-64 p-6">
@@ -250,14 +260,12 @@ export default function Home() {
                 <label className="font-medium">Auto calibrate light</label>
                 <button
                   onClick={handleAutoCalibrateToggle}
-                  className={`w-12 h-6 flex items-center rounded-full p-1 transition-colors ${
-                    autoCalibrate ? "bg-purple-500" : "bg-gray-300"
-                  }`}
+                  className={`w-12 h-6 flex items-center rounded-full p-1 transition-colors ${autoCalibrate ? "bg-purple-500" : "bg-gray-300"
+                    }`}
                 >
                   <div
-                    className={`w-4 h-4 bg-white rounded-full shadow-md transform transition-transform ${
-                      autoCalibrate ? "translate-x-6" : "translate-x-0"
-                    }`}
+                    className={`w-4 h-4 bg-white rounded-full shadow-md transform transition-transform ${autoCalibrate ? "translate-x-6" : "translate-x-0"
+                      }`}
                   ></div>
                 </button>
               </div>
@@ -278,14 +286,12 @@ export default function Home() {
                 <label className="font-medium">Open door</label>
                 <button
                   onClick={handleOpenDoorToggle}
-                  className={`w-12 h-6 flex items-center rounded-full p-1 transition-colors ${
-                    openDoor ? "bg-purple-500" : "bg-gray-300"
-                  }`}
+                  className={`w-12 h-6 flex items-center rounded-full p-1 transition-colors ${openDoor ? "bg-purple-500" : "bg-gray-300"
+                    }`}
                 >
                   <div
-                    className={`w-4 h-4 bg-white rounded-full shadow-md transform transition-transform ${
-                      openDoor ? "translate-x-6" : "translate-x-0"
-                    }`}
+                    className={`w-4 h-4 bg-white rounded-full shadow-md transform transition-transform ${openDoor ? "translate-x-6" : "translate-x-0"
+                      }`}
                   ></div>
                 </button>
               </div>
@@ -296,13 +302,13 @@ export default function Home() {
               <h2 className="text-xl font-semibold mb-4">Emergency</h2>
 
               <div className="flex flex-col gap-4">
-                <button 
+                <button
                   className="py-2 px-4 bg-red-500 text-white rounded-lg font-medium"
                   onClick={handleFireEmergency}
                 >
                   Fire emergency - Alert student
                 </button>
-                <button 
+                <button
                   className="py-2 px-4 bg-red-500 text-white rounded-lg font-medium"
                   onClick={handleEarthquakeEmergency}
                 >

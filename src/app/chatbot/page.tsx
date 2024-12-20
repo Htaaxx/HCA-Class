@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from "react";
-import { FiGrid, FiSettings, FiBarChart2, FiLogOut } from "react-icons/fi";
+import { FiGrid, FiSettings, FiBarChart2, FiLogOut, FiCpu } from "react-icons/fi";
 
 export default function Chatbot() {
   const [messages, setMessages] = useState<{ role: string; content: string }[]>([
@@ -95,6 +95,15 @@ export default function Chatbot() {
                 Configuration
               </a>
             </li>
+            <li>
+              <a
+                href="/chatbot"
+                className="flex items-center p-3 bg-gray-100 text-gray-600 rounded-md hover:bg-purple-100"
+              >
+                <FiCpu className="mr-3 text-gray-500" size={18} />
+                Chat Bot
+              </a>
+            </li>
           </ul>
         </nav>
         <div className="p-6 border-t border-gray-200">
@@ -107,6 +116,7 @@ export default function Chatbot() {
           </a>
         </div>
       </aside>
+
 
       {/* Main Content */}
       <main className="ml-64 flex-1 p-6">
@@ -125,11 +135,10 @@ export default function Chatbot() {
             {messages.map((message, index) => (
               <div
                 key={index}
-                className={`p-4 rounded-md ${
-                  message.role === "user"
+                className={`p-4 rounded-md ${message.role === "user"
                     ? "bg-blue-100 text-blue-600 self-end"
                     : "bg-gray-100 text-gray-600 self-start"
-                }`}
+                  }`}
               >
                 {message.content}
               </div>
