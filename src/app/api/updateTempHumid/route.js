@@ -1,4 +1,4 @@
-import dbConnect from "../../../../lib/mongodb";
+import dbConnect from "../../../lib/mongodb";
 import Temperature from "../../../../models/Temperature";
 
 export async function POST(req) {

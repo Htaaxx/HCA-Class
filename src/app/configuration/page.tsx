@@ -18,8 +18,33 @@ export default function Home() {
   // Get light data
   useEffect(() => {
     axios.get("http://localhost:3000/api/config/light").then((res) => {
+      // Get data from database
       setAutoCalibrate(res.data.lightAutoCalibration);
       setLightIntensity(res.data.lightBrightness);
+
+      // MQTT send brightness
+      fetch("http://localhost:3000/api/mqtt", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          topic: "home_22CLC_hfmi/sensor/get_brightness",
+          message: res.data.lightBrightness.toString(),
+        }),
+      });
+
+      // MQTT send calibrate
+      fetch("http://localhost:3000/api/mqtt", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          topic: "home_22CLC_hfmi/sensor/calibrate_brightness",
+          message: res.data.lightAutoCalibration.toString(),
+        }),
+      });
     })
       .catch((err) => {
         console.error(err);
@@ -30,6 +55,18 @@ export default function Home() {
   useEffect(() => {
     axios.get("http://localhost:3000/api/config/opendoor").then((res) => {
       setOpenDoor(res.data.doorStatus);
+
+      // MQTT send door status
+      fetch("http://localhost:3000/api/mqtt", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          topic: "home_22CLC_hfmi/door/open",
+          message: res.data.doorStatus.toString(),
+        }),
+      });
     })
       .catch((err) => {
         console.error(err);
@@ -55,6 +92,18 @@ export default function Home() {
         lightBrightness: lightIntensity,
       }),
     });
+
+    // MQTT send calibrate
+    fetch("http://localhost:3000/api/mqtt", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        topic: "home_22CLC_hfmi/sensor/calibrate_brightness",
+        message: newAutoCalibrate.toString(),
+      }),
+    });
   };
 
   const handleOpenDoorToggle = () => {
@@ -67,6 +116,18 @@ export default function Home() {
       },
       body: JSON.stringify({
         doorStatus: newOpenDoor,
+      }),
+    });
+
+    // MQTT send door status
+    fetch("http://localhost:3000/api/mqtt", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        topic: "home_22CLC_hfmi/door/open",
+        message: newOpenDoor.toString(),
       }),
     });
   };
@@ -82,6 +143,18 @@ export default function Home() {
       body: JSON.stringify({
         lightBrightness: newLightIntensity,
         lightAutoCalibration: autoCalibrate,
+      }),
+    });
+
+    // MQTT send brightness
+    fetch("http://localhost:3000/api/mqtt", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        topic: "home_22CLC_hfmi/sensor/get_brightness",
+        message: newLightIntensity.toString(),
       }),
     });
   };
