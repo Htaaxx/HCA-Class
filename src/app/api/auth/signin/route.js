@@ -29,6 +29,8 @@ export async function POST(req) {
       );
     }
 
+    console.log("User:", user);
+
     // Send a successful response with the user's data (except the password)
     return new Response(
       JSON.stringify({ message: "Login successful", user: { id: user._id, email: user.email } }),

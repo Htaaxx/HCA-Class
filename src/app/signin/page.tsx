@@ -1,12 +1,13 @@
-'use client'; // Add this directive to specify client-side rendering
+'use client'; // Client-side rendering
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const router = useRouter();
 
-  // Type the event argument to match a form submission event
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -20,10 +21,17 @@ export default function SignIn() {
       });
 
       const result = await response.json();
+      console.log("Login result:", result);
 
       if (response.ok) {
         alert("Login successful!");
-        console.log("User data:", result.user);
+
+        // Save the user info or JWT token to localStorage
+        localStorage.setItem("email", email); // Save only email
+
+        // Redirect user to dashboard after successful login
+        router.push("/dashboard");
+        console.log("User logged in:", result);
       } else {
         alert(result.message || "Login failed.");
       }
@@ -69,21 +77,6 @@ export default function SignIn() {
               placeholder="••••••••"
               className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
             />
-          </div>
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <input
-                type="checkbox"
-                id="remember"
-                className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded"
-              />
-              <label htmlFor="remember" className="ml-2 block text-sm text-gray-600">
-                Remember me
-              </label>
-            </div>
-            <a href="#" className="text-sm text-purple-500 font-semibold hover:underline">
-              Forgot your password?
-            </a>
           </div>
           <button
             type="submit"

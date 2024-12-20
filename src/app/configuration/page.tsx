@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { FiGrid, FiBarChart2, FiSettings, FiLogOut } from "react-icons/fi";
 import axios from "axios";
 import { set } from "mongoose";
+import { send, title } from "process";
 
 export default function Home() {
   
@@ -96,7 +97,38 @@ export default function Home() {
         type: "fire",
       }),
     });
+    // Call the API to alert the through mail
+    try {
+      fetch("http://localhost:3000/api/noti/email", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          subject: "Fire emergency",
+          text: "There is a fire emergency in the classroom. Please evacuate immediately.",
+          html: ""
+        }),
+      });
+    } catch (error) {
+      console.error("Error sending email:", error);
+    }
 
+    // Call the API to alert the through push notification
+    try {
+      fetch("http://localhost:3000/api/noti/push", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          title: "Fire emergency",
+          message: "There is a fire emergency in the classroom. Please evacuate immediately.",
+        }),
+      });
+    } catch (error) {
+      console.error("Error sending push notification:", error);
+    }
   };
 
   const handleEarthquakeEmergency = () => {
@@ -110,6 +142,39 @@ export default function Home() {
         type: "earthquake",
       }),
     });
+
+    // Call the API to alert the through mail
+    try {
+      fetch("http://localhost:3000/api/noti/email", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          subject: "Earthquake emergency",
+          text: "There is an earthquake emergency in the classroom. Please evacuate immediately.",
+          html: ""
+        }),
+      });
+    } catch (error) {
+      console.error("Error sending email:", error);
+    }
+
+    // Call the API to alert the through push notification
+    try {
+      fetch("http://localhost:3000/api/noti/push", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          title: "Earthquake emergency",
+          message: "There is an earthquake emergency in the classroom. Please evacuate immediately.",
+        }),
+      });
+    } catch (error) {
+      console.error("Error sending push notification:", error);
+    }
   }
 
   return (
