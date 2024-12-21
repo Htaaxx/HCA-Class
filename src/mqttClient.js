@@ -39,6 +39,10 @@ class MQTTClient {
           this.publish('home_22CLC_hfmi/door/open_close', 'true');
           this.publish('home_22CLC_hfmi/door/password_status', 'true');
         }
+        else {
+          this.publish('home_22CLC_hfmi/door/password_status', 'false');
+          console.log('Password is incorrect');
+        }
       }
       if (topic === 'home_22CLC_hfmi/door/open') {
         // Handle open message

@@ -1,10 +1,68 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect,useState } from 'react';
+import axios from 'axios';
 import 'react-calendar/dist/Calendar.css';
 import { FiGrid, FiSettings, FiBarChart2, FiLogOut, FiCpu } from 'react-icons/fi';
 
 export default function Dashboard() {
   const [date, setDate] = useState(new Date());
+  
+  interface AttendanceRecord {
+    date: string;
+    count: number;
+  }
+
+  interface TemperatureRecord {
+    timestamp: string;
+    currentTemperature: number;
+    currentHumidity: number;
+  }
+
+  interface DashboardData {
+    todayAttendanceCount: number;
+    attendanceHistory: AttendanceRecord[];
+    temperatureData: TemperatureRecord[];
+  }
+
+  const [data, setData] = useState<DashboardData>({
+    todayAttendanceCount: 0,
+    attendanceHistory: [],
+    temperatureData: [],
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("/api/analyze");
+        setData(response.data);
+      } catch (error) {
+        console.error("Error fetching dashboard data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  // Get lastest temperature and humidity data
+  const temperatureData = data.temperatureData[data.temperatureData.length - 1];
+  const currentTemperature = temperatureData?.currentTemperature;
+  const currentHumidity = temperatureData?.currentHumidity;
+
+  // Get the last 5 attendance records
+  const attendanceHistory = data.attendanceHistory.slice(-5);
+
+  // Get the date in the last 5 only in dd/mm format
+  const formattedAttendanceHistory = attendanceHistory.map((record) => ({
+    ...record,
+    date: new Date(record.date).toLocaleDateString('en-GB', {
+      day: '2-digit',
+      month: '2-digit',
+    }),
+    // Percentage of attendance (assuming min = 0, max = 100) max count = 60
+    attendancePercentage: (record.count / 60) * 100,
+  }));
+
+
 
   // Get formatted month and year
   const currentMonthYear = date.toLocaleDateString('en-US', {
@@ -125,7 +183,7 @@ export default function Dashboard() {
         <div className="p-6 border-t border-gray-200">
           <a
             href="/"
-            className="flex items-center p-3 text-gray-500 hover:text-gray-700 hover:underline"
+            className="flex items-center p-3 text-gray-800 hover:text-gray-700 hover:underline"
           >
             <FiLogOut className="mr-3" size={18} />
             Log Out
@@ -145,7 +203,7 @@ export default function Dashboard() {
           </button>
         </header>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 justify-center">
           {/* Calendar */}
           <div className="col-span-1 md:col-span-2 bg-white p-4 rounded-lg shadow calendar-container">
             <div className="calendar-header">
@@ -191,24 +249,24 @@ export default function Dashboard() {
           </div>
 
           {/* Attend */}
-          <div className="bg-purple-100 p-4 rounded-lg shadow">
-            <h2 className="text-lg font-bold mb-4">Attend</h2>
-            <p className="text-2xl font-bold">45%</p>
+          <div className="bg-purple-100 p-4 rounded-lg shadow flex flex-col justify-center items-center">
+            <h2 className="text-lg font-bold text-gray-900 mb-4">Attend</h2>
+            <p className="text-2xl font-bold text-gray-900">{data.todayAttendanceCount}</p>
           </div>
 
           {/* Temp */}
-          <div className="bg-blue-100 p-4 rounded-lg shadow">
-            <h2 className="text-lg font-bold mb-4">Temp</h2>
-            <p className="text-2xl font-bold">20°C</p>
+          <div className="bg-blue-100 p-4 rounded-lg shadow flex flex-col justify-center items-center">
+            <h2 className="text-lg font-bold text-gray-900 mb-4">Temp</h2>
+            <p className="text-2xl font-bold text-gray-900">{currentTemperature}°C</p>
           </div>
 
           {/* Humid */}
-          <div className="bg-teal-100 p-4 rounded-lg shadow">
-            <h2 className="text-lg font-bold mb-4">Humid</h2>
-            <p className="text-2xl font-bold">25%</p>
+          <div className="bg-teal-100 p-4 rounded-lg shadow flex flex-col justify-center items-center">
+            <h2 className="text-lg font-bold text-gray-900 mb-4">Humid</h2>
+            <p className="text-2xl font-bold text-gray-900">{currentHumidity}%</p>
           </div>
 
-          {/* Upcoming Class */}
+          {/* Upcoming Class
           <div className="col-span-1 md:col-span-2 bg-white p-4 rounded-lg shadow">
             <h2 className="text-lg font-bold mb-4">Upcoming Class</h2>
             <div className="space-y-4">
@@ -221,19 +279,19 @@ export default function Dashboard() {
                 <span className="text-sm">12:00 PM</span>
               </div>
             </div>
-          </div>
+          </div> */}
 
           {/* Attend History */}
           <div className="bg-white p-4 rounded-lg shadow">
             <h2 className="text-lg font-bold mb-4">Attend History</h2>
             <div className="space-y-2">
-              {["Mon", "Tue", "Wed", "Thu", "Fri"].map((day, index) => (
+              {formattedAttendanceHistory.map((record, index) => (
                 <div key={index} className="flex justify-between items-center">
-                  <span>{day}</span>
+                  <span>{record.date}</span> {/* Display formatted date */}
                   <div className="w-2/3 bg-gray-200 rounded-full h-2">
                     <div
                       className="bg-red-500 h-2 rounded-full"
-                      style={{ width: `${index * 20}%` }}
+                      style={{ width: `${record.attendancePercentage}%` }} // Assuming attendancePercentage is available
                     ></div>
                   </div>
                 </div>
