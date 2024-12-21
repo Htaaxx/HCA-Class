@@ -100,7 +100,7 @@ export default function Home() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        topic: "home_22CLC_hfmi/sensor/calibrate_brightness",
+        topic: "home_22CLC_hfmi/sensor/calibrate",
         message: newAutoCalibrate.toString(),
       }),
     });

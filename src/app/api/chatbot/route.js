@@ -31,12 +31,17 @@ export async function POST(req) {
         console.log("Attendance history:", attendanceHistory);
         console.log("Temperature data:", temperatureData);
 
+        // only take last 10 temperature data
+        const newtemperatureData = temperatureData.slice(-10);
+        
+        // Only take last 10 attendance history
+        const newAttendanceHistory = attendanceHistory.slice(-10);
 
         const template = 
             `Bạn là một chatbot để truy vấn thông tin hệ thống. Bạn biết về lịch sử điểm danh, dữ liệu nhiệt độ của một lớp học.
             Hôm nay là ngày ${today}, hiện tại là ${time}. Số lượng học sinh đã điểm danh hôm nay là ${todayAttendanceCount}.
-            Lịch sử điểm danh gần đây: ${attendanceHistory}. Dữ liệu nhiệt độ là: ${temperatureData}. Khi trả lời người dùng, hãy nói một cách dễ hiểu cho con người.
-            Khi người dùng hỏi vể dữ liệu hiện tại, hãy trả về dữ liệu có được gần nhất.`;
+            Lịch sử điểm danh gần đây: ${newAttendanceHistory}. Dữ liệu nhiệt độ là: ${newtemperatureData}. Khi trả lời người dùng, hãy nói một cách dễ hiểu cho con người.
+            Khi người dùng hỏi vể dữ liệu hiện tại, hãy trả về dữ liệu có được gần nhất. Hãy đưa các dữ liệu thời gian ra một cách dễ hiểu cho người dùng. Không cần nói về thời gian.`;
         const response = await groq.chat.completions.create({
             messages: [
               {

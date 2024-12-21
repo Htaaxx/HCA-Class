@@ -8,36 +8,39 @@ export default function Home() {
         <h1 className="text-xl font-bold text-purple-400">SmartClass</h1>
         <div>
           <button className="text-white bg-purple-600 px-4 py-2 rounded-md hover:bg-purple-700 transition">
-            <a href="signup">
-              Sign Up
-              </a>
+            <a href="signup">Sign Up</a>
           </button>
           <button className="ml-4 text-purple-600 bg-white px-4 py-2 rounded-md hover:bg-gray-100 transition">
-            <a href="signin">
-              Sign In
-            </a>
+            <a href="signin">Sign In</a>
           </button>
         </div>
       </header>
 
-      {/* Main Content with Image Background */}
-      <main
-        className="flex-1 flex items-center bg-cover bg-center px-8"
-        style={{
-          backgroundImage: "url('/image.png')",
-        }}
-      >
-        <div className="bg-black bg-opacity-50 p-8 rounded-lg max-w-lg">
+      {/* Main Content with Dimmed Background */}
+      <main className="relative flex-1 flex items-center px-8">
+        {/* Background Image */}
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{
+            backgroundImage: "url('/img.jpg')", // Path to your image
+          }}
+        ></div>
+
+        {/* Dimmed Overlay */}
+        <div className="absolute inset-0 bg-black bg-opacity-60"></div>
+
+        {/* Content */}
+        <div className="relative z-10 bg-black bg-opacity-50 p-8 rounded-lg max-w-lg">
           <h2 className="text-4xl font-bold text-purple-300 mb-4 text-left">
             The Future of Learning Environments
           </h2>
           <p className="text-lg text-gray-300 mb-6 text-left">
-            SmartClass transforms classrooms with facial recognition, automated comfort controls, and real-time safety alerts for a smarter, safer learning environment.
+            SmartClass transforms classrooms with facial recognition, automated
+            comfort controls, and real-time safety alerts for a smarter, safer
+            learning environment.
           </p>
           <button className="bg-purple-600 text-white px-6 py-3 rounded-md text-lg hover:bg-purple-700 transition text-left">
-            <a href="signin">
-              Log in now 
-            </a>
+            <a href="signin">Log in now</a>
           </button>
         </div>
       </main>

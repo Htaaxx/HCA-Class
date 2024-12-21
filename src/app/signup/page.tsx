@@ -1,12 +1,15 @@
 'use client'; // Add this directive to specify client-side rendering
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function SignUp() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const router = useRouter();
 
   // Type the event argument to match a form submission event
   const handleSubmit = async (e: React.FormEvent) => {
@@ -26,6 +29,7 @@ export default function SignUp() {
       if (response.ok) {
         alert("Sign up successful!");
         console.log("User data:", result.user);
+        router.push("/signin");
       } else {
         alert(result.message || "Sign up failed.");
       }
