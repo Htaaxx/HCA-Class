@@ -37,7 +37,7 @@ class MQTTClient {
         // Handle password message
         if (message.toString() === '1234') {
           this.publish('home_22CLC_hfmi/door/open_close', 'true');
-          this.publish('home_22CLC_hfmi/door/check_password', 'true');
+          this.publish('home_22CLC_hfmi/door/password_status', 'true');
         }
       }
       if (topic === 'home_22CLC_hfmi/door/open') {
@@ -100,9 +100,16 @@ class MQTTClient {
 }
 
 
-const brokerUrl = 'mqtt://broker.hivemq.com:1883'; 
+// const brokerUrl = 'mqtt://broker.emqx.io:1883'; 
+// const brokerUrl = 'mqtt://test.mosquitto.org:1883';
+// const brokerUrl = 'mqtt://mqtt.eclipse.org:1883';
+const brokerUrl = 'mqtt://broker.hivemq.com:1883';
+// ip :115.73.5.245
+// const brokerUrl = 'mqtt://115.73.5.245:1883';
+
 const mqttClient = new MQTTClient(brokerUrl, [
     'home_22CLC_hfmi/door/password',
+    'home_22CLC_hfmi/door/password_status',
     'home_22CLC_hfmi/door/open', 
     'home_22CLC_hfmi/door/open_close', 
     'home_22CLC_hfmi/sensor/temperature', 

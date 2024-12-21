@@ -30,7 +30,7 @@ export async function saveTemperatureData(temp, humidity) {
       currentHumidity: humidity,
     });
     await record.save();
-    console.log("Temperature data saved:", record);
+    //console.log("Temperature data saved:", record);
     return record;
   } catch (error) {
     console.error("Error saving temperature data:", error);
